@@ -13,7 +13,7 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 
 @Path("/users")
-@jakarta.annotation.Generated(value = "nablarch.tool.openapi.codegen.JavaNablarchJaxrsServerCodegen", date = "2024-12-09T21:46:07.954889834+09:00[Asia/Tokyo]", comments = "Generator version: 7.10.0")
+@jakarta.annotation.Generated(value = "nablarch.tool.openapi.codegen.JavaNablarchJaxrsServerCodegen", date = "2025-01-14T15:36:11.110268256+09:00[Asia/Tokyo]", comments = "Generator version: 7.10.0")
 public interface UsersApi {
     /**
      * POST  : ユーザを作成する

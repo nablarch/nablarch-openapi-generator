@@ -16,32 +16,29 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/**
- * エラーレスポンス
- */
-@JsonTypeName("ErrorResponse")
-@jakarta.annotation.Generated(value = "nablarch.tool.openapi.codegen.JavaNablarchJaxrsServerCodegen", date = "2025-01-14T15:36:11.110268256+09:00[Asia/Tokyo]", comments = "Generator version: 7.10.0")
-public class ErrorResponse   {
-  private String message;
+
+@JsonTypeName("ValidationSubRequest")
+@jakarta.annotation.Generated(value = "nablarch.tool.openapi.codegen.JavaNablarchJaxrsServerCodegen", date = "2025-01-14T17:33:40.051298569+09:00[Asia/Tokyo]", comments = "Generator version: 7.10.0")
+public class ValidationSubRequest   {
+  private String subProperty;
 
     /**
-     * メッセージ
      */
-    public ErrorResponse message(String message) {
-        this.message = message;
+    public ValidationSubRequest subProperty(String subProperty) {
+        this.subProperty = subProperty;
         return this;
     }
 
     
-    @JsonProperty("message")
-    
-    public String getMessage() {
-        return message;
+    @JsonProperty("subProperty")
+    @Required @Domain("subProperty")
+    public String getSubProperty() {
+        return subProperty;
     }
 
-    @JsonProperty("message")
-    public void setMessage(String message) {
-        this.message = message;
+    @JsonProperty("subProperty")
+    public void setSubProperty(String subProperty) {
+        this.subProperty = subProperty;
     }
 
 
@@ -53,21 +50,21 @@ public class ErrorResponse   {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        ErrorResponse errorResponse = (ErrorResponse) o;
-        return Objects.equals(this.message, errorResponse.message);
+        ValidationSubRequest validationSubRequest = (ValidationSubRequest) o;
+        return Objects.equals(this.subProperty, validationSubRequest.subProperty);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(message);
+        return Objects.hash(subProperty);
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("class ErrorResponse {\n");
+        sb.append("class ValidationSubRequest {\n");
         
-        sb.append("    message: ").append(toIndentedString(message)).append("\n");
+        sb.append("    subProperty: ").append(toIndentedString(subProperty)).append("\n");
         sb.append("}");
         return sb.toString();
     }
