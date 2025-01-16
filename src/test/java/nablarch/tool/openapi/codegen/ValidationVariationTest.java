@@ -16,7 +16,13 @@ import org.openapitools.codegen.ClientOptInput;
 import org.openapitools.codegen.DefaultGenerator;
 import org.openapitools.codegen.config.CodegenConfigurator;
 
+/**
+ * {@link JavaNablarchJaxrsServerCodegen}でサポートするバリデーションのバリエーションをテストするクラス。
+ */
 public class ValidationVariationTest extends JavaNablarchJaxrsServerCodegenOpenApi30TestSupport {
+    /**
+     * OpenAPI仕様で定義されているバリデーションがすべて利用できているかテストする
+     */
     @Test
     public void openapiStandardValidations() {
         Map<String, Object> properties = new HashMap<>();
@@ -63,6 +69,10 @@ public class ValidationVariationTest extends JavaNablarchJaxrsServerCodegenOpenA
         }
     }
 
+    /**
+     * ドメインバリデーションを使用しているプロパティがある場合、OpenAPI仕様で標準のバリデーションと
+     * 競合するものがあればソースコード生成に失敗することをテストする
+     */
     @Test
     public void conflictDomainValidation() {
         List<String> openApiDefinisions = List.of(
@@ -103,6 +113,10 @@ public class ValidationVariationTest extends JavaNablarchJaxrsServerCodegenOpenA
         }
     }
 
+    /**
+     * ドメインバリデーションを使用しており、競合するバリデーションもない場合はドメインバリデーション用の
+     * アノテーションが付与されることを確認する
+     */
     @Test
     public void domainValidations() {
         Map<String, Object> properties = new HashMap<>();
