@@ -1,0 +1,20 @@
+    /**
+     * {{httpMethod}} {{{path}}}{{#summary}} : {{.}}{{/summary}}
+     *
+    {{#notes}}
+     * {{.}}
+    {{/notes}}
+     *{{#allParams}}{{#isBodyParam}}
+     * @param {{paramName}} {{description}}{{/isBodyParam}}{{/allParams}}
+     * @param jaxRsHttpRequest HTTPリクエスト
+     * @param context ハンドラ実行コンテキスト
+     {{#responses}}
+     * @return {{{message}}}
+     {{/responses}}
+     */
+    @{{httpMethod}}{{#subresourceOperation}}
+    @Path("{{{path}}}"){{/subresourceOperation}}{{#hasConsumes}}
+    @Consumes({ {{#consumes}}"{{{mediaType}}}"{{^-last}}, {{/-last}}{{/consumes}} }){{/hasConsumes}}{{^isResponseBinary}}{{#hasProduces}}
+    @Produces({ {{#produces}}"{{{mediaType}}}"{{^-last}}, {{/-last}}{{/produces}} }){{/hasProduces}}{{/isResponseBinary}}{{#useBeanValidation}}{{#allParams}}{{#isBodyParam}}
+    @Valid{{/isBodyParam}}{{/allParams}}{{/useBeanValidation}}
+    {{#returnProperty}}{{#isResponseBinary}}HttpResponse{{/isResponseBinary}}{{^isResponseBinary}}EntityResponse<{{{dataType}}}>{{/isResponseBinary}}{{/returnProperty}}{{^returnProperty}}HttpResponse{{/returnProperty}} {{operationId}}({{#allParams}}{{#isBodyParam}}{{{dataType}}} {{paramName}}, {{/isBodyParam}}{{/allParams}}JaxRsHttpRequest jaxRsHttpRequest, ExecutionContext context);
