@@ -39,8 +39,7 @@ components:
         stringProperty:
           type: string
           pattern: "[a-z]+"
-          x-nablarch-validations:
-            domain: "stringProperty"
+          x-nablarch-domain: "stringProperty"
     ValidationResponse:
       type: object
       properties:

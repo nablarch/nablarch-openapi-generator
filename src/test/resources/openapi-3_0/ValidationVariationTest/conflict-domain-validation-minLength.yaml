@@ -39,8 +39,7 @@ components:
         stringProperty:
           type: string
           minLength: 3
-          x-nablarch-validations:
-            domain: "stringProperty"
+          x-nablarch-domain: "stringProperty"
     ValidationResponse:
       type: object
       properties:

@@ -39,8 +39,7 @@ components:
         integerProperty:
           type: integer
           minimum: 3
-          x-nablarch-validations:
-            domain: "integerProperty"
+          x-nablarch-domain: "integerProperty"
     ValidationResponse:
       type: object
       properties:

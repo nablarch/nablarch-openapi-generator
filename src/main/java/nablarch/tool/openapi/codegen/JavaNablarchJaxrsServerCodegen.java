@@ -417,15 +417,7 @@ public class JavaNablarchJaxrsServerCodegen extends AbstractJavaJAXRSServerCodeg
         }
 
         Map<String, Object> extensions = codegenProperty.getVendorExtensions();
-        @SuppressWarnings("unchecked")
-        Map<String, ?> nablarchValidationsExtension = (Map<String, ?>) extensions.get("x-nablarch-validations");
-
-        if (nablarchValidationsExtension == null) {
-            // Nablarch用の拡張が設定されていない場合は対象外
-            return false;
-        }
-
-        return nablarchValidationsExtension.containsKey("domain");
+        return extensions.containsKey("x-nablarch-domain");
     }
 
     /**

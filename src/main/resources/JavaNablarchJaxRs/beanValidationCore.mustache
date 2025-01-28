@@ -47,9 +47,6 @@ Not Integer, not Long => we have a decimal value!
 }}{{#minimum}}{{^maximum}}@DecimalRange(min = "{{minimum}}") {{/maximum}}{{/minimum}}{{!
      minimum not set && maximum set
 }}{{^minimum}}{{#maximum}}@DecimalRange(max = "{{maximum}}") {{/maximum}}{{/minimum}}{{/isLong}}{{/isInteger}}{{!
-}}{{#vendorExtensions.x-nablarch-validations}}{{!
-  Nablarch Bean Validation
-}}{{!
-    Domain Validation
-}}{{#domain}}@Domain("{{.}}"){{/domain}}{{!
-}}{{/vendorExtensions.x-nablarch-validations}}
+}}{{#vendorExtensions.x-nablarch-domain}}{{!
+  Nablarch Bean Validation / Domain Validation
+}}@Domain("{{.}}"){{/vendorExtensions.x-nablarch-domain}}

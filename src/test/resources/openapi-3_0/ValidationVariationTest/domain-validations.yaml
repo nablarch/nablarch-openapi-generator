@@ -45,48 +45,38 @@ components:
       properties:
         integerProperty:
           type: integer
-          x-nablarch-validations:
-            domain: "integerProperty"
+          x-nablarch-domain: "integerProperty"
         integerRequiredProperty:
           type: integer
-          x-nablarch-validations:
-            domain: "integerRequiredProperty"
+          x-nablarch-domain: "integerRequiredProperty"
         numberProperty:
           type: number
-          x-nablarch-validations:
-            domain: "numberProperty"
+          x-nablarch-domain: "numberProperty"
         numberRequiredProperty:
           type: number
-          x-nablarch-validations:
-            domain: "numberRequiredProperty"
+          x-nablarch-domain: "numberRequiredProperty"
         booleanProperty:
           type: boolean
-          x-nablarch-validations:
-            domain: "booleanProperty"
+          x-nablarch-domain: "booleanProperty"
         booleanRequiredProperty:
           type: boolean
-          x-nablarch-validations:
-            domain: "booleanRequiredProperty"
+          x-nablarch-domain: "booleanRequiredProperty"
         stringProperty:
           type: string
-          x-nablarch-validations:
-            domain: "stringProperty"
+          x-nablarch-domain: "stringProperty"
         stringRequiredProperty:
           type: string
-          x-nablarch-validations:
-            domain: "stringRequiredProperty"
+          x-nablarch-domain: "stringRequiredProperty"
         arrayStringProperty:
           type: array
           items:
             type: string
-          x-nablarch-validations:
-            domain: "arrayStringProperty"
+          x-nablarch-domain: "arrayStringProperty"
         arrayStringRequiredProperty:
           type: array
           items:
             type: string
-          x-nablarch-validations:
-            domain: "arrayStringRequiredProperty"
+          x-nablarch-domain: "arrayStringRequiredProperty"
         objectProperty:
           $ref: '#/components/schemas/ValidationSubRequest'
         objectRequiredProperty:
@@ -103,5 +93,4 @@ components:
       properties:
         subProperty:
           type: string
-          x-nablarch-validations:
-            domain: "subProperty"
+          x-nablarch-domain: "subProperty"
