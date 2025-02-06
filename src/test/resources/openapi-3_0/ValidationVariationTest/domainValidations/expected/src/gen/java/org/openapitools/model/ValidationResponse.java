@@ -16,18 +16,15 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/**
- * エラーレスポンス
- */
-@JsonTypeName("ErrorResponse")
-@jakarta.annotation.Generated(value = "nablarch.tool.openapi.codegen.JavaNablarchJaxrsServerCodegen", date = "2025-01-14T15:36:11.110268256+09:00[Asia/Tokyo]", comments = "Generator version: 7.10.0")
-public class ErrorResponse   {
+
+@JsonTypeName("ValidationResponse")
+@jakarta.annotation.Generated(value = "nablarch.tool.openapi.codegen.JavaNablarchJaxrsServerCodegen", date = "2025-01-14T17:33:40.051298569+09:00[Asia/Tokyo]", comments = "Generator version: 7.10.0")
+public class ValidationResponse   {
   private String message;
 
     /**
-     * メッセージ
      */
-    public ErrorResponse message(String message) {
+    public ValidationResponse message(String message) {
         this.message = message;
         return this;
     }
@@ -53,8 +50,8 @@ public class ErrorResponse   {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        ErrorResponse errorResponse = (ErrorResponse) o;
-        return Objects.equals(this.message, errorResponse.message);
+        ValidationResponse validationResponse = (ValidationResponse) o;
+        return Objects.equals(this.message, validationResponse.message);
     }
 
     @Override
@@ -65,7 +62,7 @@ public class ErrorResponse   {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("class ErrorResponse {\n");
+        sb.append("class ValidationResponse {\n");
         
         sb.append("    message: ").append(toIndentedString(message)).append("\n");
         sb.append("}");

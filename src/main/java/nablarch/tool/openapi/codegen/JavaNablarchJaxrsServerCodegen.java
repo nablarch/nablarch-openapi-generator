@@ -10,6 +10,7 @@ import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.servers.Server;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 import org.openapitools.codegen.CliOption;
 import org.openapitools.codegen.CodegenConstants;
 import org.openapitools.codegen.CodegenModel;
@@ -216,6 +217,7 @@ public class JavaNablarchJaxrsServerCodegen extends AbstractJavaJAXRSServerCodeg
         importMapping.put("Length", "nablarch.core.validation.ee.Length");
         importMapping.put("NumberRange", "nablarch.core.validation.ee.NumberRange");
         importMapping.put("DecimalRange", "nablarch.core.validation.ee.DecimalRange");
+        importMapping.put("Domain", "nablarch.core.validation.ee.Domain");
         importMapping.put("Valid", "jakarta.validation.Valid");
         importMapping.put("Pattern", "jakarta.validation.constraints.Pattern");
         importMapping.put("Serializable", "java.io.Serializable");
@@ -360,6 +362,7 @@ public class JavaNablarchJaxrsServerCodegen extends AbstractJavaJAXRSServerCodeg
             model.imports.add("Length");
             model.imports.add("NumberRange");
             model.imports.add("DecimalRange");
+            model.imports.add("Domain");
         }
 
         // モデルから不要なimportを削除
@@ -383,6 +386,13 @@ public class JavaNablarchJaxrsServerCodegen extends AbstractJavaJAXRSServerCodeg
             if (codegenProperty.isBinary) {
                 throw new UnsupportedOperationException("property type: string and format: binary are not supported");
             }
+
+            // ドメインバリデーションの生成が有効になっている場合
+            if (enableDomainValidation(codegenProperty)) {
+                if (hasValidationForConflictingDomainValidation(codegenProperty)) {
+                    throw new UnsupportedOperationException("When using Nablarch Domain Validation, it cannot be combined with [minimum, maximum, minLength, maxLength, minItems, maxItems, pattern]");
+                }
+            }
         }
 
         // 必要なimport文を追加
@@ -394,4 +404,35 @@ public class JavaNablarchJaxrsServerCodegen extends AbstractJavaJAXRSServerCodeg
         return codegenModel;
     }
 
+    /**
+     * モデルのプロパティにドメインバリデーションが設定されている場合に{@code true}を返却する
+     *
+     * @param codegenProperty モデルのプロパティ
+     * @return ドメインバリデーションが設定されている場合は{@code true}
+     */
+    private boolean enableDomainValidation(CodegenProperty codegenProperty) {
+        if (!isUseBeanValidation()) {
+            // Bean Validationのサポートを有効にしていない場合は対象外
+            return false;
+        }
+
+        Map<String, Object> extensions = codegenProperty.getVendorExtensions();
+        return extensions.containsKey("x-nablarch-domain");
+    }
+
+    /**
+     * モデルのプロパティに対して、ドメインバリデーションと競合するバリデーションが設定されている場合に{@code true}を返却する
+     *
+     * @param codegenProperty モデルのプロパティ
+     * @return ドメインバリデーションと競合するバリデーションが設定されている場合は{@code true}
+     */
+    private boolean hasValidationForConflictingDomainValidation(CodegenProperty codegenProperty) {
+        return StringUtils.isNotEmpty(codegenProperty.getMinimum()) ||
+                StringUtils.isNotEmpty(codegenProperty.getMaximum()) ||
+                codegenProperty.getMinLength() != null ||
+                codegenProperty.getMaxLength() != null ||
+                codegenProperty.getMinItems() != null ||
+                codegenProperty.getMaxItems() != null ||
+                StringUtils.isNotEmpty(codegenProperty.getPattern());
+    }
 }

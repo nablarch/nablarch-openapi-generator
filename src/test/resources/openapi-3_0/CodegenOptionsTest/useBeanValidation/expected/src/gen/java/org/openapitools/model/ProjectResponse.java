@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import nablarch.core.validation.ee.DecimalRange;
+import nablarch.core.validation.ee.Domain;
 import nablarch.core.validation.ee.Length;
 import nablarch.core.validation.ee.NumberRange;
 import nablarch.core.validation.ee.Required;
@@ -25,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * プロジェクト情報
  */
 @JsonTypeName("ProjectResponse")
-@jakarta.annotation.Generated(value = "nablarch.tool.openapi.codegen.JavaNablarchJaxrsServerCodegen", date = "2024-12-09T21:46:07.954889834+09:00[Asia/Tokyo]", comments = "Generator version: 7.10.0")
+@jakarta.annotation.Generated(value = "nablarch.tool.openapi.codegen.JavaNablarchJaxrsServerCodegen", date = "2025-01-14T15:36:11.110268256+09:00[Asia/Tokyo]", comments = "Generator version: 7.10.0")
 public class ProjectResponse   {
   private UUID id;
   private String name;
