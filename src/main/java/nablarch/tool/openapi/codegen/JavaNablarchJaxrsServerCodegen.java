@@ -31,6 +31,8 @@ import org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen;
  *
  * @see <a href="https://github.com/OpenAPITools/openapi-generator/tree/v7.10.0/modules/openapi-generator/src/main/resources/JavaJaxRS/spec">jaxrs-specのMustacheテンプレート</a>
  */
+@Getter
+@Setter
 public class JavaNablarchJaxrsServerCodegen extends AbstractJavaJAXRSServerCodegen {
     /**
      * Generator前
@@ -54,24 +56,28 @@ public class JavaNablarchJaxrsServerCodegen extends AbstractJavaJAXRSServerCodeg
     static final String SUPPORT_PRODUCES_MEDIA_TYPES = "supportProducesMediaTypes";
 
     /**
+     * {@code Valid}を{@code import}文に追加するための名称
+     */
+    static final String IMPORT_VALID = "Valid";
+
+    /**
+     *
+     */
+    static final String TYPE_MAPPING_STRING = "String";
+
+    /**
      * プリミティブ型のプロパティをすべてString型とする場合は{@code true}。
      */
-    @Getter
-    @Setter
     private boolean primitivePropertiesAsString = false;
 
     /**
      * Generatorがサポートする、リクエストとして受け付けるメディアタイプ。
      */
-    @Getter
-    @Setter
     private List<String> supportConsumesMediaTypes = List.of("application/json", "multipart/form-data");
 
     /**
      * Generatorがサポートする、レスポンスとして返却するメディアタイプ。
      */
-    @Getter
-    @Setter
     private List<String> supportProducesMediaTypes = List.of("application/json");
 
     /**
@@ -79,6 +85,7 @@ public class JavaNablarchJaxrsServerCodegen extends AbstractJavaJAXRSServerCodeg
      *
      * @return Generator名
      */
+    @Override
     public String getName() {
         return GENERATOR_NAME;
     }
@@ -88,6 +95,7 @@ public class JavaNablarchJaxrsServerCodegen extends AbstractJavaJAXRSServerCodeg
      *
      * @return ヘルプ
      */
+    @Override
     public String getHelp() {
         return "Generates a nablarch-jaxrs server library.";
     }
@@ -218,7 +226,7 @@ public class JavaNablarchJaxrsServerCodegen extends AbstractJavaJAXRSServerCodeg
         importMapping.put("NumberRange", "nablarch.core.validation.ee.NumberRange");
         importMapping.put("DecimalRange", "nablarch.core.validation.ee.DecimalRange");
         importMapping.put("Domain", "nablarch.core.validation.ee.Domain");
-        importMapping.put("Valid", "jakarta.validation.Valid");
+        importMapping.put(IMPORT_VALID, "jakarta.validation.Valid");
         importMapping.put("Pattern", "jakarta.validation.constraints.Pattern");
         importMapping.put("Serializable", "java.io.Serializable");
 
@@ -226,26 +234,26 @@ public class JavaNablarchJaxrsServerCodegen extends AbstractJavaJAXRSServerCodeg
 
         // プリミティブをすべてStringとして扱う場合
         if (primitivePropertiesAsString) {
-            typeMapping.put("boolean", "String");
-            typeMapping.put("string", "String");
-            typeMapping.put("int", "String");
-            typeMapping.put("float", "String");
-            typeMapping.put("double", "String");
-            typeMapping.put("number", "String");
-            typeMapping.put("decimal", "String");
-            typeMapping.put("date", "String");
-            typeMapping.put("DateTime", "String");
-            typeMapping.put("long", "String");
-            typeMapping.put("short", "String");
-            typeMapping.put("integer", "String");
-            typeMapping.put("UnsignedInteger", "String");
-            typeMapping.put("UnsignedLong", "String");
-            typeMapping.put("char", "String");
-            typeMapping.put("ByteArray", "String");
-            typeMapping.put("binary", "String");
-            typeMapping.put("file", "String");
-            typeMapping.put("UUID", "String");
-            typeMapping.put("URI", "String");
+            typeMapping.put("boolean", TYPE_MAPPING_STRING);
+            typeMapping.put("string", TYPE_MAPPING_STRING);
+            typeMapping.put("int", TYPE_MAPPING_STRING);
+            typeMapping.put("float", TYPE_MAPPING_STRING);
+            typeMapping.put("double", TYPE_MAPPING_STRING);
+            typeMapping.put("number", TYPE_MAPPING_STRING);
+            typeMapping.put("decimal", TYPE_MAPPING_STRING);
+            typeMapping.put("date", TYPE_MAPPING_STRING);
+            typeMapping.put("DateTime", TYPE_MAPPING_STRING);
+            typeMapping.put("long", TYPE_MAPPING_STRING);
+            typeMapping.put("short", TYPE_MAPPING_STRING);
+            typeMapping.put("integer", TYPE_MAPPING_STRING);
+            typeMapping.put("UnsignedInteger", TYPE_MAPPING_STRING);
+            typeMapping.put("UnsignedLong", TYPE_MAPPING_STRING);
+            typeMapping.put("char", TYPE_MAPPING_STRING);
+            typeMapping.put("ByteArray", TYPE_MAPPING_STRING);
+            typeMapping.put("binary", TYPE_MAPPING_STRING);
+            typeMapping.put("file", TYPE_MAPPING_STRING);
+            typeMapping.put("UUID", TYPE_MAPPING_STRING);
+            typeMapping.put("URI", TYPE_MAPPING_STRING);
             // array、set、map、objectは対象外
         }
     }
@@ -264,63 +272,8 @@ public class JavaNablarchJaxrsServerCodegen extends AbstractJavaJAXRSServerCodeg
         // 継承元から、コード生成用のオペレーションを生成
         CodegenOperation op = super.fromOperation(path, httpMethod, operation, servers);
 
-        if (op.hasConsumes) {
-            List<Map<String, String>> consumes = op.consumes;
-
-            List<String> unsupportedMediaTypes = new ArrayList<>();
-
-            for (Map<String, String> consume : consumes) {
-                String mediaType = consume.get("mediaType");
-
-                boolean supported = false;
-
-                for (String supportMediaType : supportConsumesMediaTypes) {
-                    if (supportMediaType.equalsIgnoreCase(mediaType)) {
-                        supported = true;
-                        break;
-                    }
-                }
-
-                if (!supported) {
-                    unsupportedMediaTypes.add(mediaType);
-                }
-            }
-
-            if (!unsupportedMediaTypes.isEmpty()) {
-                throw new UnsupportedOperationException("Unsupported consumes media types: " + unsupportedMediaTypes);
-            }
-        }
-
-        if (op.hasProduces) {
-            // レスポンスがバイナリの場合は、サポートするメディアタイプのチェックは行わない
-            if (!op.isResponseBinary) {
-
-                List<Map<String, String>> produces = op.produces;
-
-                List<String> unsupportedMediaTypes = new ArrayList<>();
-
-                for (Map<String, String> consume : produces) {
-                    String mediaType = consume.get("mediaType");
-
-                    boolean supported = false;
-
-                    for (String supportMediaType : supportProducesMediaTypes) {
-                        if (supportMediaType.equalsIgnoreCase(mediaType)) {
-                            supported = true;
-                            break;
-                        }
-                    }
-
-                    if (!supported) {
-                        unsupportedMediaTypes.add(mediaType);
-                    }
-                }
-
-                if (!unsupportedMediaTypes.isEmpty()) {
-                    throw new UnsupportedOperationException("Unsupported produces media types: " + unsupportedMediaTypes);
-                }
-            }
-        }
+        // オペレーションにサポートしていないメディアタイプが設定されている場合は例外をスローする
+        throwIfOperationHasUnsupportedMediaType(op);
 
         // オペレーション（API）に追加するimport
         op.imports.add("ExecutionContext");
@@ -330,7 +283,7 @@ public class JavaNablarchJaxrsServerCodegen extends AbstractJavaJAXRSServerCodeg
 
         if (isUseBeanValidation()) {
             // Bean Validationが有効な場合、Apiのimport文に@Validを追加
-            op.imports.add("Valid");
+            op.imports.add(IMPORT_VALID);
         }
 
         return op;
@@ -355,7 +308,7 @@ public class JavaNablarchJaxrsServerCodegen extends AbstractJavaJAXRSServerCodeg
         }
 
         if (isUseBeanValidation()) {
-            model.imports.add("Valid");
+            model.imports.add(IMPORT_VALID);
             model.imports.add("Pattern");
             model.imports.add("Required");
             model.imports.add("Size");
@@ -388,10 +341,8 @@ public class JavaNablarchJaxrsServerCodegen extends AbstractJavaJAXRSServerCodeg
             }
 
             // ドメインバリデーションの生成が有効になっている場合
-            if (enableDomainValidation(codegenProperty)) {
-                if (hasValidationForConflictingDomainValidation(codegenProperty)) {
-                    throw new UnsupportedOperationException("When using Nablarch Domain Validation, it cannot be combined with [minimum, maximum, minLength, maxLength, minItems, maxItems, pattern]");
-                }
+            if (enableDomainValidation(codegenProperty) && hasValidationForConflictingDomainValidation(codegenProperty)) {
+                throw new UnsupportedOperationException("When using Nablarch Domain Validation, it cannot be combined with [minimum, maximum, minLength, maxLength, minItems, maxItems, pattern]");
             }
         }
 
@@ -402,6 +353,88 @@ public class JavaNablarchJaxrsServerCodegen extends AbstractJavaJAXRSServerCodeg
         codegenModel.imports.remove("ApiModel");
 
         return codegenModel;
+    }
+
+    /**
+     * コード生成用のオペレーションに、サポートされていないメディアタイプが設定されている場合は{@link UnsupportedOperationException}をスローする
+     *
+     * @param op コード生成用のオペレーション
+     */
+    private void throwIfOperationHasUnsupportedMediaType(CodegenOperation op) {
+        if (op.hasConsumes) {
+            throwIfOperationConsumesHasUnsupportedMediaType(op);
+        }
+
+        if (op.hasProduces) {
+            throwIfOperationProducesHasUnsupportedMediaType(op);
+        }
+    }
+
+    /**
+     * コード生成用のオペレーションのリクエスト部に、サポートされていないメディアタイプが設定されている場合は{@link UnsupportedOperationException}をスローする
+     *
+     * @param op コード生成用のオペレーション
+     */
+    private void throwIfOperationConsumesHasUnsupportedMediaType(CodegenOperation op) {
+        List<Map<String, String>> consumes = op.consumes;
+
+        List<String> unsupportedMediaTypes = new ArrayList<>();
+
+        for (Map<String, String> consume : consumes) {
+            String mediaType = consume.get("mediaType");
+
+            boolean supported = false;
+
+            for (String supportMediaType : supportConsumesMediaTypes) {
+                if (supportMediaType.equalsIgnoreCase(mediaType)) {
+                    supported = true;
+                    break;
+                }
+            }
+
+            if (!supported) {
+                unsupportedMediaTypes.add(mediaType);
+            }
+        }
+
+        if (!unsupportedMediaTypes.isEmpty()) {
+            throw new UnsupportedOperationException("Unsupported consumes media types: " + unsupportedMediaTypes);
+        }
+    }
+
+    /**
+     * コード生成用のオペレーションのレスポンス部に、サポートされていないメディアタイプが設定されている場合は{@link UnsupportedOperationException}をスローする
+     *
+     * @param op コード生成用のオペレーション
+     */
+    private void throwIfOperationProducesHasUnsupportedMediaType(CodegenOperation op) {
+        if (!op.isResponseBinary) {
+            // レスポンスがバイナリの場合は、サポートするメディアタイプのチェックは行わない
+            List<Map<String, String>> produces = op.produces;
+
+            List<String> unsupportedMediaTypes = new ArrayList<>();
+
+            for (Map<String, String> consume : produces) {
+                String mediaType = consume.get("mediaType");
+
+                boolean supported = false;
+
+                for (String supportMediaType : supportProducesMediaTypes) {
+                    if (supportMediaType.equalsIgnoreCase(mediaType)) {
+                        supported = true;
+                        break;
+                    }
+                }
+
+                if (!supported) {
+                    unsupportedMediaTypes.add(mediaType);
+                }
+            }
+
+            if (!unsupportedMediaTypes.isEmpty()) {
+                throw new UnsupportedOperationException("Unsupported produces media types: " + unsupportedMediaTypes);
+            }
+        }
     }
 
     /**
