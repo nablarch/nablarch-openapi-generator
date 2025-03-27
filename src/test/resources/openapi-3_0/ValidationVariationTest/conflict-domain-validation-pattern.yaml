@@ -1,0 +1,47 @@
+---
+openapi: 3.0.3
+info:
+  title: OpenAPI Sample
+  version: 0.0.1
+servers:
+- url: http://localhost:8080
+  description: OpenAPI Sample description
+paths:
+  /validations:
+    get:
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ValidationResponse'
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidationRequest'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationResponse'
+components:
+  schemas:
+    ValidationRequest:
+      type: object
+      properties:
+        stringProperty:
+          type: string
+          pattern: "[a-z]+"
+          x-nablarch-domain: "stringProperty"
+    ValidationResponse:
+      type: object
+      properties:
+        message:
+          type: string

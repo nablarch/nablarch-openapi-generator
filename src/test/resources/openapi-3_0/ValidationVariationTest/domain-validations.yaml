@@ -1,0 +1,96 @@
+---
+openapi: 3.0.3
+info:
+  title: OpenAPI Sample
+  version: 0.0.1
+servers:
+- url: http://localhost:8080
+  description: OpenAPI Sample description
+paths:
+  /validations:
+    get:
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ValidationResponse'
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidationRequest'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationResponse'
+components:
+  schemas:
+    ValidationRequest:
+      required:
+      - integerRequiredProperty
+      - numberRequiredProperty
+      - booleanRequiredProperty
+      - stringRequiredProperty
+      - arrayStringRequiredProperty
+      - objectRequiredProperty
+      type: object
+      properties:
+        integerProperty:
+          type: integer
+          x-nablarch-domain: "integerProperty"
+        integerRequiredProperty:
+          type: integer
+          x-nablarch-domain: "integerRequiredProperty"
+        numberProperty:
+          type: number
+          x-nablarch-domain: "numberProperty"
+        numberRequiredProperty:
+          type: number
+          x-nablarch-domain: "numberRequiredProperty"
+        booleanProperty:
+          type: boolean
+          x-nablarch-domain: "booleanProperty"
+        booleanRequiredProperty:
+          type: boolean
+          x-nablarch-domain: "booleanRequiredProperty"
+        stringProperty:
+          type: string
+          x-nablarch-domain: "stringProperty"
+        stringRequiredProperty:
+          type: string
+          x-nablarch-domain: "stringRequiredProperty"
+        arrayStringProperty:
+          type: array
+          items:
+            type: string
+          x-nablarch-domain: "arrayStringProperty"
+        arrayStringRequiredProperty:
+          type: array
+          items:
+            type: string
+          x-nablarch-domain: "arrayStringRequiredProperty"
+        objectProperty:
+          $ref: '#/components/schemas/ValidationSubRequest'
+        objectRequiredProperty:
+          $ref: '#/components/schemas/ValidationSubRequest'
+    ValidationResponse:
+      type: object
+      properties:
+        message:
+          type: string
+    ValidationSubRequest:
+      required:
+      - subProperty
+      type: object
+      properties:
+        subProperty:
+          type: string
+          x-nablarch-domain: "subProperty"
